@@ -14,9 +14,9 @@ def SendMessage(title):  # 发送邮件
         name, addr = parseaddr(s)
         return formataddr((Header(name, 'utf-8').encode(), addr))
 
-    from_addr = '****'
-    password = '****'
-    to_addr = '****'
+    from_addr = 'psxhero@163.com'
+    password = 'bwdbtxdaurpudjhs'
+    to_addr = '15996155035@139.com'
     smtp_server = 'smtp.163.com'
     msg = MIMEText(title, 'plain', 'utf-8')
     msg['From'] = _format_addr('爬虫提醒 <%s>' % from_addr)
@@ -41,23 +41,25 @@ def loop(WebNum):  # 解析网页并且每10秒钟自动执行一次查询功能
                 final_title = soup.title.string
                 title = final_title[:-9]
                 WebNum += 1
-                #print(title + str(WebNum-1))
-                SendMessage(title)
+                print(title + str(WebNum-1))
+                #SendMessage(title)
                 sleep(1)
             except:  # 发现非法网页,无法解析
                 print('无法查询到，进行下一个网页查询' + str(WebNum))
                 WebNum += 1
                 checksum += 1
-                if (checksum > 3):  # 若连续3个网页无法解析，认为已经获取到最新的消息，退出功能
+                if checksum > 3:  # 若连续3个网页无法解析，认为已经获取到最新的消息，退出功能
                     checksum = 0
-                    WebNum -=4
-                    #print('本次函数运行结束！')
+                    WebNum -= 4
+                    print('本次函数运行结束！')
                     break
                 else:
                     continue  # 若小于3个网页，继续进行解析
-    time.sleep(10)  # 停止10秒钟后再次执行该函数
+        time.sleep(300)  # 停止10分钟后再次执行该函数
+    time.sleep(600)
 
-print(loop(2590)) # 2590为淮阴工学院教务处的某一则新闻
+
+print(loop(2594)) # 2594为淮阴工学院教务处的某一则新闻
 
 '''
 注释
