@@ -41,17 +41,17 @@ def loop(WebNum):  # 解析网页并且每10秒钟自动执行一次查询功能
                 final_title = soup.title.string
                 title = final_title[:-9]
                 WebNum += 1
-                print(title + str(WebNum-1))
-                # SendMessage(title)
+                #print(title + str(WebNum-1))
+                SendMessage(title)
                 sleep(1)
-            except:  #发现无法网页无法解析
+            except:  # 发现非法网页,无法解析
                 print('无法查询到，进行下一个网页查询' + str(WebNum))
                 WebNum += 1
                 checksum += 1
                 if (checksum > 3):  # 若连续3个网页无法解析，认为已经获取到最新的消息，退出功能
                     checksum = 0
                     WebNum -=4
-                    print('我的任务结束啦！')
+                    #print('本次函数运行结束！')
                     break
                 else:
                     continue  # 若小于3个网页，继续进行解析
