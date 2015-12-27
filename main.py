@@ -28,34 +28,8 @@ def SendMessage(title):  # 发送邮件
     server.sendmail(from_addr, [to_addr], msg.as_string())
     server.quit()
 
-'''
-def analyiseWeb(WebNum):  # 解析网页并发送邮件
 
-    main_page = 'http://jwch.hyit.edu.cn/index.aspx?menuid=29&type=articleinfo&lanmuid=121&infoid='
-    checksum = 0
-    for i in range(1, 10000):
-        try:
-            main_html = requests.get(main_page + str(WebNum))
-            main_text = main_html.text
-            soup = BeautifulSoup(main_text, "html.parser")
-            final_title = soup.title.string
-            title = final_title[:-9]
-            WebNum += 1
-            print(title + str(WebNum))
-            # SendMessage(title)
-            sleep(1)
-        except:
-            print('无法查询到，进行下一次查询' + str(WebNum))
-            WebNum += 1
-            checksum += 1
-            if (checksum > 3):
-                checksum = 0
-                break
-            else:
-                continue
-
-'''
-def loop(WebNum):
+def loop(WebNum):  # 解析网页并且每10秒钟自动执行一次查询功能
     while True:
         main_page = 'http://jwch.hyit.edu.cn/index.aspx?menuid=29&type=articleinfo&lanmuid=121&infoid='
         checksum = 0
@@ -67,19 +41,36 @@ def loop(WebNum):
                 final_title = soup.title.string
                 title = final_title[:-9]
                 WebNum += 1
-                print(title + str(WebNum))
+                print(title + str(WebNum-1))
                 # SendMessage(title)
                 sleep(1)
-            except:
+            except:  #发现无法网页无法解析
                 print('无法查询到，进行下一个网页查询' + str(WebNum))
                 WebNum += 1
                 checksum += 1
-                if (checksum > 3):
+                if (checksum > 3):  # 若连续3个网页无法解析，认为已经获取到最新的消息，退出功能
                     checksum = 0
+                    WebNum -=4
                     print('我的任务结束啦！')
                     break
                 else:
-                    continue
-    time.sleep(10)
+                    continue  # 若小于3个网页，继续进行解析
+    time.sleep(10)  # 停止10秒钟后再次执行该函数
 
-print(loop(2590))
+print(loop(2590)) # 2590为淮阴工学院教务处的某一则新闻
+
+'''
+注释
+main_page：新闻地址前缀
+WebNum: 新闻ID
+main_html：新闻网页
+main_text：新闻全部文字
+final_title：新闻标题
+title：过滤后的得到的标题
+from_addr：发件人信箱
+password = 邮箱密码
+to_addr = 收件人信箱
+smtp_server = smtp域名（一般格式为：smtp.你邮箱域名，例如smtp.163.com）
+
+特别注意！如果使用163信箱，请确保开启了smtp服务,同时输入的是163提供的smtp邮箱密码，非登陆163邮箱的密码！
+'''
