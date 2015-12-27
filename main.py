@@ -6,9 +6,10 @@ from time import sleep
 from bs4 import BeautifulSoup
 import requests
 import smtplib
+import time
 
 
-def SendMessage(title):
+def SendMessage(title):  # 发送邮件
     def _format_addr(s):
         name, addr = parseaddr(s)
         return formataddr((Header(name, 'utf-8').encode(), addr))
@@ -27,28 +28,58 @@ def SendMessage(title):
     server.sendmail(from_addr, [to_addr], msg.as_string())
     server.quit()
 
-def analyiseWeb(WebNum):
-    mainpage = 'http://jwch.hyit.edu.cn/index.aspx?menuid=29&type=articleinfo&lanmuid=121&infoid='
-    CheckNum = 0
-    for i in range(1,10000):
+'''
+def analyiseWeb(WebNum):  # 解析网页并发送邮件
+
+    main_page = 'http://jwch.hyit.edu.cn/index.aspx?menuid=29&type=articleinfo&lanmuid=121&infoid='
+    checksum = 0
+    for i in range(1, 10000):
         try:
-            main_html = requests.get(mainpage + str(WebNum))
+            main_html = requests.get(main_page + str(WebNum))
             main_text = main_html.text
             soup = BeautifulSoup(main_text, "html.parser")
             final_title = soup.title.string
             title = final_title[:-9]
             WebNum += 1
             print(title + str(WebNum))
-            #SendMessage(title)
+            # SendMessage(title)
             sleep(1)
         except:
             print('无法查询到，进行下一次查询' + str(WebNum))
             WebNum += 1
-            CheckNum += 1
-            if (CheckNum > 3):
-                CheckNum = 0
+            checksum += 1
+            if (checksum > 3):
+                checksum = 0
                 break
             else:
                 continue
 
-print(analyiseWeb(2590))
+'''
+def loop(WebNum):
+    while True:
+        main_page = 'http://jwch.hyit.edu.cn/index.aspx?menuid=29&type=articleinfo&lanmuid=121&infoid='
+        checksum = 0
+        for i in range(1, 10000):
+            try:
+                main_html = requests.get(main_page + str(WebNum))
+                main_text = main_html.text
+                soup = BeautifulSoup(main_text, "html.parser")
+                final_title = soup.title.string
+                title = final_title[:-9]
+                WebNum += 1
+                print(title + str(WebNum))
+                # SendMessage(title)
+                sleep(1)
+            except:
+                print('无法查询到，进行下一个网页查询' + str(WebNum))
+                WebNum += 1
+                checksum += 1
+                if (checksum > 3):
+                    checksum = 0
+                    print('我的任务结束啦！')
+                    break
+                else:
+                    continue
+    time.sleep(10)
+
+print(loop(2590))
