@@ -9,9 +9,9 @@ import smtplib
 import time
 import pymysql
 
-def Insert_MySQL(WebNum,title):
-     conn = pymysql.connect(user='root', passwd='654321',
-                           host='localhost', db='test1',charset='utf8')
+def Insert_MySQL(WebNum,title):  # 连接数据库并保存爬到的新闻
+     conn = pymysql.connect(user='***', passwd='***',
+                           host='***', db='**',charset='utf8')
      cur = conn.cursor()
      sql_insert = "INSERT INTO new VALUES('"+WebNum+"','"+title+"')"
      try:
