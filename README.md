@@ -1,4 +1,4 @@
-# ScrayofJWCHbyHYIT
+# TranslationsofHYITbyPython
 
 淮阴工学院教务网新闻爬虫
 
