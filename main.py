@@ -7,6 +7,20 @@ from bs4 import BeautifulSoup
 import requests
 import smtplib
 import time
+import pymysql
+
+def Insert_MySQL(WebNum,title):
+     conn = pymysql.connect(user='root', passwd='654321',
+                           host='localhost', db='test1',charset='utf8')
+     cur = conn.cursor()
+     sql_insert = "INSERT INTO new VALUES('"+WebNum+"','"+title+"')"
+     try:
+         cur.execute(sql_insert)
+         conn.commit()
+     except:
+        conn.rollback()
+     cur.close()
+     conn.close()
 
 
 def SendMessage(title):  # 发送邮件
@@ -40,6 +54,7 @@ def loop(WebNum):  # 解析网页并且每10秒钟自动执行一次查询功能
                 soup = BeautifulSoup(main_text, "html.parser")
                 final_title = soup.title.string
                 title = final_title[:-9]
+                Insert_MySQL(str(WebNum),str(title))
                 WebNum += 1
                 SendMessage(title)
                 sleep(1)
@@ -52,11 +67,10 @@ def loop(WebNum):  # 解析网页并且每10秒钟自动执行一次查询功能
                     break
                 else:
                     continue  # 若小于3个网页，继续进行解析
-        time.sleep(300)  # 停止10分钟后再次执行该函数
-    time.sleep(600)
+        time.sleep(300)  # 停止5分钟后再次执行该函数
+    time.sleep(10)
 
-
-print(loop(2594)) # 2594为淮阴工学院教务处的某一则新闻
+print(loop(2598)) # 2594为淮阴工学院教务处的某一则新闻
 
 '''
 注释
