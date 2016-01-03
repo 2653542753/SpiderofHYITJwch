@@ -13,7 +13,7 @@ def Insert_MySQL(WebNum,title):  # 连接数据库并保存爬到的新闻
      conn = pymysql.connect(user='***', passwd='***',
                            host='***', db='**',charset='utf8')
      cur = conn.cursor()
-     sql_insert = "INSERT INTO new VALUES('"+WebNum+"','"+title+"')"
+     sql_insert ="INSERT INTO new VALUES('%s', '%s')" % (WebNum, title)
      try:
          cur.execute(sql_insert)
          conn.commit()
