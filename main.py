@@ -28,10 +28,10 @@ def SendMessage(title):  # 发送邮件
         name, addr = parseaddr(s)
         return formataddr((Header(name, 'utf-8').encode(), addr))
 
-    from_addr = 'psxhero@163.com'
-    password = 'bwdbtxdaurpudjhs'
-    to_addr = '15996155035@139.com'
-    smtp_server = 'smtp.163.com'
+    from_addr = '******'
+    password = '*******'
+    to_addr = '*****'
+    smtp_server = '******'
     msg = MIMEText(title, 'plain', 'utf-8')
     msg['From'] = _format_addr('爬虫提醒 <%s>' % from_addr)
     msg['To'] = _format_addr('管理员 <%s>' % to_addr)
